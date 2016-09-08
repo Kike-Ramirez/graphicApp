@@ -12,18 +12,18 @@ void setup() {
 
   dw = width/ncol;
   dh = height/nfil;
-  
+  ui.setup();
+
 }
 
 void draw() {
 
   background(#434242);
-  ui.setup();
   
 }
 
 void mousePressed() {
-  selectInput("Select a file to process:", "fileSelected");
+  //selectInput("Select a file to process:", "fileSelected");
 
 }
 
