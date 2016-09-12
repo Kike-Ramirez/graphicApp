@@ -4,6 +4,7 @@ class UI {
   ControlP5 cp5;
   Accordion accordion;
   PGraphics canvasShape;
+
   
   UI(PApplet applet_) {
   
@@ -17,18 +18,20 @@ class UI {
     cp5 = new ControlP5(applet);
   
     int altRes = 2 * dh;
-    cp5.addTextfield("Width:")
+    cp5.addTextfield("Width")
      .setPosition(dw, altRes)
      .setSize(9 * dw, 3 * dh)
      .setColor(color(255))
      .setValue(1024)
+     .setAutoClear(false)
      ;
 
-    cp5.addTextfield("Height:")
+    cp5.addTextfield("Height")
      .setPosition(12 * dw, altRes)
      .setSize(9 * dw, 3 * dh)
      .setColor(color(255))
      .setValue(768)
+     .setAutoClear(false)
      ;
   
   int altLoad = 9 * dh;
@@ -88,6 +91,7 @@ class UI {
      .addItem("Triangle",2)
      .addItem("Quad",3)
      .addItem("Shape",4)
+     .activate("Point")
      ;
   
   int hShape = 11 * dh;
@@ -147,6 +151,7 @@ class UI {
      .addItem("TIFF",2)
      .addItem("JPEG",3)
      .addItem("PDF",4)
+     .activate("PNG")
      ;     
 
   cp5.addButton("Save File")
@@ -205,5 +210,35 @@ class UI {
     image(canvasShape, 15 * dw, 29 * dh);
     
   }
+
+public void Width(String theText) {
+  // automatically receives results from controller input
+  println("a textfield event for controller 'input' : "+theText);
+  
+  try {
+        engine.canvasW = Integer.parseInt(theText);
+        engine.updateResolution();
+        
+  } catch (NumberFormatException e) {
+        //Will Throw exception!
+        //do something! anything to handle the exception.
+        println("error");
+  }
+}
+
+public void Height(String theText) {
+  // automatically receives results from controller input
+  println("a textfield event for controller 'input' : "+theText);
+  
+  try {
+        engine.canvasH = Integer.parseInt(theText);
+        engine.updateResolution();
+        
+  } catch (NumberFormatException e) {
+        //Will Throw exception!
+        //do something! anything to handle the exception.
+        println("error");
+  }
+}
 
 }

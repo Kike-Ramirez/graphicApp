@@ -2,6 +2,7 @@ import controlP5.*;
 
 UI ui;
 Grid grid;
+Engine engine;
 PImage input, background;
 
 int ncol = 100;
@@ -16,11 +17,13 @@ void setup() {
   dw = width/ncol;
   dh = height/nfil;
   grid = new Grid(dw, dh);  
+  engine = new Engine();
   
   input = loadImage("test7.png");
   
+  
   ui.setup();
-
+  
 }
 
 void draw() {
@@ -28,11 +31,10 @@ void draw() {
   background(#434242);
   //grid.draw();
   ui.draw();
+  engine.updateDraw();
+  engine.display();
   
-  int inputX = 23 * dw + (width - 23 * dw - input.width) / 2;
-  int inputY = (height - input.height) / 2;
-  
-  image(input, inputX, inputY);
+
   
 }
 
@@ -47,4 +49,14 @@ void fileSelected(File selection) {
   } else {
     println("User selected " + selection.getAbsolutePath());
   }
+}
+
+public void Width(String theText) {
+  // automatically receives results from controller input
+  ui.Width(theText);
+}
+
+public void Height(String theText) {
+  // automatically receives results from controller input
+  ui.Height(theText);
 }
