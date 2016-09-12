@@ -1,9 +1,6 @@
 import controlP5.*;
 
 UI ui;
-Grid grid;
-PImage input, background;
-
 int ncol = 100;
 int nfil = 100;
 int dw, dh;
@@ -15,10 +12,6 @@ void setup() {
 
   dw = width/ncol;
   dh = height/nfil;
-  grid = new Grid(dw, dh);  
-  
-  input = loadImage("test7.png");
-  
   ui.setup();
 
 }
@@ -26,13 +19,6 @@ void setup() {
 void draw() {
 
   background(#434242);
-  //grid.draw();
-  ui.draw();
-  
-  int inputX = 23 * dw + (width - 23 * dw - input.width) / 2;
-  int inputY = (height - input.height) / 2;
-  
-  image(input, inputX, inputY);
   
 }
 
