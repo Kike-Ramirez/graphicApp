@@ -35,19 +35,19 @@ class UI {
      ;
   
   int altLoad = 9 * dh;
-  cp5.addButton("Load Image")
+  cp5.addButton("LoadImg")
      .setValue(0)
      .setPosition(dw, altLoad)
      .setSize(6 *dw, 3 * dh)
      ;
 
-  cp5.addButton("Define Mask")
+  cp5.addButton("DefineMsk")
      .setValue(0)
      .setPosition(8 * dw, altLoad)
      .setSize(6 *dw, 3 * dh)
      ;
 
-  cp5.addButton("Delete Mask")
+  cp5.addButton("DeleteMsk")
      .setValue(0)
      .setPosition(15 * dw, altLoad)
      .setSize(6 *dw, 3 * dh)
@@ -239,6 +239,12 @@ public void Height(String theText) {
         //do something! anything to handle the exception.
         println("error");
   }
+}
+
+public void LoadImg() {
+  
+  selectInput("Select a file to process:", "fileSelected");
+  
 }
 
 }

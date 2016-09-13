@@ -48,6 +48,7 @@ void fileSelected(File selection) {
     println("Window was closed or the user hit cancel.");
   } else {
     println("User selected " + selection.getAbsolutePath());
+    engine.updateImage(selection.getAbsolutePath());
   }
 }
 
@@ -59,4 +60,10 @@ public void Width(String theText) {
 public void Height(String theText) {
   // automatically receives results from controller input
   ui.Height(theText);
+}
+
+public void LoadImg() {
+
+  ui.LoadImg();
+  
 }
