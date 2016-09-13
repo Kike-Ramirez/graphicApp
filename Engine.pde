@@ -2,7 +2,10 @@ class Engine {
 
   PImage input;
   PGraphics canvas;
-  int canvasW, canvasH;
+  int canvasW, canvasH, canvasX, canvasY;
+  boolean masking = false;
+  ArrayList<PVector> masks;
+  PShape maskShape;
   
   Engine() {
   
@@ -10,41 +13,89 @@ class Engine {
     canvasH = 768;
     
     canvas = createGraphics(canvasW, canvasH);
-    input = loadImage("test7.png");
+    input = null;
+    masks = new ArrayList<PVector>();
+    maskShape = createShape();
 
   }
 
   void updateResolution() {
     
     canvas = createGraphics(canvasW, canvasH);
+    masks = new ArrayList<PVector>();
+    maskShape = createShape();
     
+  }
+  
+  void deleteMask() {
+  
+    masking = false;
+    masks = new ArrayList<PVector>();
+    maskShape = createShape();
+    
+  }
+  
+  
+  void updateMasking() {
+  
+    masks.add(new PVector(mouseX - canvasX, mouseY - canvasY));
+    maskShape = createShape();
+    maskShape.beginShape();
+    maskShape.noFill();
+    maskShape.stroke(255,0,0);
+//maskShape.strokeWeight(0.1);
+    
+    for (int i = 0; i < masks.size(); i++ ) {
+    
+      maskShape.vertex(masks.get(i).x, masks.get(i).y);
+      
+    }
+    maskShape.endShape();
+  
   }
   
   void updateImage(String url) {
   
-    input = loadImage(url);
+    try {
+    PImage input_ = loadImage(url);
+    input = input_.copy();
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
     
   }
   
   void updateDraw() {
-
-    float ratioCanvas = float(canvasW)/canvasH;
-    float ratioInput = float(input.width)/input.height;
     
     canvas.beginDraw();
     canvas.background(255);
+        
+    if (input != null) {
+      
+      float ratioCanvas = float(canvasW)/canvasH;
+      float ratioInput = float(input.width)/input.height;
     
-    if (ratioCanvas <= ratioInput) {
-    
-      canvas.image(input, 0, 0, canvasH * ratioInput, canvasH);
-    
+      if (ratioCanvas <= ratioInput) {
+      
+        canvas.image(input, 0, 0, canvasH * ratioInput, canvasH);
+      
+      }
+      
+      else {
+      
+        canvas.image(input, 0, 0, canvasW, float(canvasW) / ratioInput);
+      
+      }
     }
     
     else {
-    
-      canvas.image(input, 0, 0, canvasW, float(canvasW) / ratioInput);
-    
+      
+      canvas.noStroke();
+      canvas.fill(0);
+      canvas.rect(0, 0, canvasW, canvasH);
     }
+    
+    canvas.shape(maskShape, 0, 0);
     
     canvas.endDraw();
   
@@ -54,8 +105,6 @@ class Engine {
     
     int widthArea = width - 24 * dw; 
     int heightArea = height - 2 * dh;
-    int canvasX = 0;
-    int canvasY = 0;
     
     
     float ratioCanvas = float(canvasW)/canvasH;

@@ -40,6 +40,13 @@ void draw() {
 
 void mousePressed() {
   //selectInput("Select a file to process:", "fileSelected");
+  if (engine.masking) engine.updateMasking();
+  
+}
+
+void mouseDragged() {
+
+  if (engine.masking) engine.updateMasking();
 
 }
 
@@ -65,5 +72,17 @@ public void Height(String theText) {
 public void LoadImg() {
 
   ui.LoadImg();
+  
+}
+
+public void DefineMsk() {
+
+  ui.DefineMsk();
+  
+}
+
+public void DeleteMsk() {
+
+  ui.DeleteMsk();
   
 }

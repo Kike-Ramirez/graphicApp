@@ -247,4 +247,16 @@ public void LoadImg() {
   
 }
 
+public void DefineMsk() {
+  
+  engine.masking = true;
+  
+}
+
+public void DeleteMsk() {
+  
+  engine.deleteMask();
+  
+}
+
 }
