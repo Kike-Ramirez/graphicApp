@@ -38,10 +38,19 @@ class Engine {
   
   void updateMasking() {
   
+    if (masks.size() > 0) {
+      if ((abs(mouseX - canvasX - masks.get(0).x) < 5) && (abs(mouseY - canvasY - masks.get(0).y) < 5)) {
+        
+        masking = false;
+        
+      }
+    }
+    
     masks.add(new PVector(mouseX - canvasX, mouseY - canvasY));
     maskShape = createShape();
     maskShape.beginShape();
-    maskShape.noFill();
+    if (masking) maskShape.noFill();
+    else maskShape.fill(0);
     maskShape.stroke(255,0,0);
 //maskShape.strokeWeight(0.1);
     
