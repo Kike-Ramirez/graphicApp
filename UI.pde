@@ -4,6 +4,7 @@ class UI {
   ControlP5 cp5;
   Accordion accordion;
   PGraphics canvasShape;
+  ColorPicker cp, cp2;
 
   
   UI(PApplet applet_) {
@@ -102,7 +103,7 @@ class UI {
      .setRange(0,2)
      .setValue(0.3)
      ;     
-  cp5.addColorPicker("Color")
+  cp = cp5.addColorPicker("Color")
      .setPosition(dw, altFormat + 5 * dh)
      .setSize(20*dw, 3*dh)
      .setColorValue(color(255))
@@ -120,10 +121,10 @@ class UI {
      .setPosition(12 * dw, altBackground)
      .setSize(9 *dw, 3 * dh)
      ;
-  cp5.addColorPicker("Color Background")
+  cp2 = cp5.addColorPicker("Color Background")
      .setPosition(dw, altBackground + 4 * dh)
      .setSize(20*dw, 6*dh)
-     .setColorValue(color(255))
+     .setColorValue(color(0))
      ;
      
   int altExport = 77 * dh;
@@ -156,7 +157,12 @@ class UI {
      .setPosition(dw, altExport + 11 * dh)
      .setSize(20 *dw, 3 * dh)
      ;
-     
+  
+  cp5.addButton("Exit")
+     .setPosition(dw, altExport + 15 * dh)
+     .setSize(20 *dw, 3 * dh)
+     ;
+  
   //// create a new accordion
   //// add g1, g2, and g3 to the accordion.
   //accordion = cp5.addAccordion("acc")
@@ -205,6 +211,9 @@ class UI {
     canvasShape.endDraw();
     
     image(canvasShape, 15 * dw, 29 * dh);
+
+    fill(255);
+    text("Press 'S' to show input image, 'H' to hide.", dw, 77*dh +22* dh);
     
   }
 

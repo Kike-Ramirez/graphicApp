@@ -1,3 +1,9 @@
+/* Graphic App. v1.0
+   Author: Kike Ramirez
+   mail_ kike@espadaysantacruz.com
+   Date: 19/09/2016
+   */
+   
 import controlP5.*;
 
 UI ui;
@@ -90,6 +96,12 @@ public void DeleteMsk() {
 public void UpdGrid() {
 
   ui.UpdGrid();
+  
+}
+
+public void Exit() {
+
+  exit();
   
 }
 

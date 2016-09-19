@@ -4,7 +4,7 @@ import java.util.Collections;
 class Engine {
 
   PImage input;
-  PGraphics canvas, layerGrid, layerEffects;
+  PGraphics canvas, layerGrid, layerEffects, layerInput;
   int canvasW, canvasH, canvasX, canvasY;
   boolean masking = false;
   ArrayList<PVector> masks;
@@ -21,6 +21,7 @@ class Engine {
     
     canvas = createGraphics(canvasW, canvasH);
     layerGrid = createGraphics(canvasW, canvasH);
+    layerInput = createGraphics(canvasW, canvasH);
     input = null;
     masks = new ArrayList<PVector>();
     triangles = new ArrayList<Triangle>();
@@ -33,15 +34,41 @@ class Engine {
     
     canvas = createGraphics(canvasW, canvasH);
     layerGrid = createGraphics(canvasW, canvasH);
+    layerInput = createGraphics(canvasW, canvasH);
+
     masks = new ArrayList<PVector>();
+    triangles = new ArrayList<Triangle>();
+    points = new ArrayList<PVector>();
     maskShape = createShape();
     
+    if (input != null) {
+      
+    float ratioCanvas = float(canvasW)/canvasH;
+    float ratioInput = float(input.width)/input.height;      
+      
+        if (ratioCanvas <= ratioInput) {
+      
+          layerInput.beginDraw();
+          layerInput.image(input, 0, 0, canvasH * ratioInput, canvasH);
+          layerInput.endDraw();
+          
+        }
+        
+        else {
+        
+          layerInput.beginDraw();
+          layerInput.image(input, 0, 0, canvasW, float(canvasW) / ratioInput);
+          layerInput.endDraw();
+        
+      }  
+    }
   }
   
   void updateGrid() {
    
     // Reset values
-    triangles = new ArrayList<Triangle>();
+    
+    triangles = new ArrayList<Triangle>(); 
     points = new ArrayList<PVector>();
     
     // Implents grid generation logic
@@ -59,10 +86,10 @@ class Engine {
         if ((py < 0) || (py > canvas.height)) py = j;
         
         
-        float brillo = brightness(canvas.get(i,j));
+        float brillo = brightness(layerInput.get(i,j));
         float prob = map(brillo, 0, 255, 0, 1);
         
-        if (random(1) < prob) {
+        if (random(0.7) < prob) {
           
           points.add(new PVector(px, py));         //canvas.set(i, j, color(brillo));
           // brillos.add(prob);
@@ -74,6 +101,7 @@ class Engine {
     
     // get the triangulated mesh
     triangles = Triangulate.triangulate(points);
+    
     
   }
   
@@ -115,50 +143,71 @@ class Engine {
   
   void updateImage(String url) {
   
-    try {
+  try {
     PImage input_ = loadImage(url);
     input = input_.copy();
-  } catch (Exception e) {
+
+    float ratioCanvas = float(canvasW)/canvasH;
+    float ratioInput = float(input.width)/input.height;
+      
+    if (ratioCanvas <= ratioInput) {
+      
+      layerInput.beginDraw();
+      layerInput.image(input, 0, 0, canvasH * ratioInput, canvasH);
+      layerInput.endDraw();
+      
+    }
+    
+    else {
+    
+      layerInput.beginDraw();
+      layerInput.image(input, 0, 0, canvasW, float(canvasW) / ratioInput);
+      layerInput.endDraw();
+    
+    }  
+
+
+    } catch (Exception e) {
     e.printStackTrace();
   }
+  
+
     
   }
   
   void updateDraw() {
+
+    displayTriangles();
     
     canvas.beginDraw();
-    canvas.background(255);
+    canvas.background(ui.cp2.getColorValue());
+
         
-    if ((input != null) && (showInput)) {
+    if (input != null) {
       
       float ratioCanvas = float(canvasW)/canvasH;
       float ratioInput = float(input.width)/input.height;
     
       if (ratioCanvas <= ratioInput) {
-      
-        canvas.image(input, 0, 0, canvasH * ratioInput, canvasH);
-      
+        
+        if (showInput) canvas.image(layerInput, 0, 0);
+        canvas.image(layerGrid, 0, 0);
+        
       }
       
       else {
       
-        canvas.image(input, 0, 0, canvasW, float(canvasW) / ratioInput);
+        if (showInput) canvas.image(layerInput, 0, 0);
+        canvas.image(layerGrid, 0, 0);
       
       }
     }
     
-    else {
-      
-      canvas.noStroke();
-      canvas.fill(0);
-      canvas.rect(0, 0, canvasW, canvasH);
-    }
-    
     canvas.shape(maskShape, 0, 0);
-    
+    // canvas.text(frameRate, 20, 20);
+
     canvas.endDraw();
     
-    displayTriangles();
   
   }
   
@@ -178,7 +227,6 @@ class Engine {
         canvasX = 23 * dw + (widthArea - canvasW) / 2;
         canvasY = dh + (heightArea - canvasH) / 2;
         image(canvas, canvasX, canvasY);
-        println("1) Resolution: " + canvasW + " " + canvasH);
       }
       
       else {
@@ -186,7 +234,6 @@ class Engine {
         canvasX = 23 * dw;
         canvasY = dh + (int) (heightArea - (float(widthArea) / ratioCanvas)) / 2;
         image(canvas, canvasX, canvasY, widthArea, float(widthArea) / ratioCanvas );
-        println("2) Resolution: " + widthArea + " " + float(widthArea) / ratioCanvas);
       
       }
     
@@ -216,30 +263,31 @@ class Engine {
   }
 
   void displayTriangles() {
-    
+        
     if (triangles.size() > 0) {
       
       // draw the mesh of triangles
-      canvas.noFill();
-      canvas.beginDraw();
-      canvas.beginShape(TRIANGLES);
+      layerGrid.beginDraw();
+      layerGrid.background(0,0);
+      layerGrid.noFill();
+      layerGrid.beginShape(TRIANGLES);
 
-      canvas.stroke(color(255)); //ui.cp5.getController("Color").getValue(), 200);
-      canvas.strokeWeight(ui.cp5.getController("Stroke").getValue());
+      layerGrid.strokeWeight(ui.cp5.getController("Stroke").getValue());
+      layerGrid.stroke(color(ui.cp.getColorValue()), 200);
      
       for (int i = 0; i < triangles.size(); i++) {
 
         Triangle t = (Triangle)triangles.get(i);
         
-        canvas.vertex(t.p1.x, t.p1.y);
-        canvas.vertex(t.p2.x, t.p2.y);
-        canvas.vertex(t.p3.x, t.p3.y);
+        layerGrid.vertex(t.p1.x, t.p1.y);
+        layerGrid.vertex(t.p2.x, t.p2.y);
+        layerGrid.vertex(t.p3.x, t.p3.y);
       
       }
       
-      canvas.endShape();
+      layerGrid.endShape();
       
-      canvas.endDraw();
+      layerGrid.endDraw();
     }
     
   }
