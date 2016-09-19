@@ -86,3 +86,16 @@ public void DeleteMsk() {
   ui.DeleteMsk();
   
 }
+
+public void UpdGrid() {
+
+  ui.UpdGrid();
+  
+}
+
+void keyPressed() {
+
+  if ((key == 'h') || (key == 'H')) engine.showInput = false;
+  if ((key == 's') || (key == 'S')) engine.showInput = true;
+
+}

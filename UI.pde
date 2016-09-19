@@ -36,19 +36,16 @@ class UI {
   
   int altLoad = 9 * dh;
   cp5.addButton("LoadImg")
-     .setValue(0)
      .setPosition(dw, altLoad)
      .setSize(6 *dw, 3 * dh)
      ;
 
   cp5.addButton("DefineMsk")
-     .setValue(0)
      .setPosition(8 * dw, altLoad)
      .setSize(6 *dw, 3 * dh)
      ;
 
   cp5.addButton("DeleteMsk")
-     .setValue(0)
      .setPosition(15 * dw, altLoad)
      .setSize(6 *dw, 3 * dh)
      ;
@@ -58,19 +55,19 @@ class UI {
   cp5.addSlider("Density")
      .setPosition(dw, altGrid)
      .setSize(17 * dw, 3 * dh)
-     .setRange(4,100)
+     .setRange(2,20)
      .setValue(10)
+     .setNumberOfTickMarks(19)
      ;
      
   cp5.addSlider("Noise")
      .setPosition(dw, altGrid + 4 * dh)
      .setSize(17 * dw, 3 * dh)
-     .setRange(0,100)
+     .setRange(0,20)
      .setValue(0)
      ;
 
-  cp5.addButton("Reset Grid")
-     .setValue(0)
+  cp5.addButton("UpdGrid")
      .setPosition(dw, altGrid + 8 *dh)
      .setSize(20 *dw, 3 * dh)
      ;
@@ -102,8 +99,8 @@ class UI {
   cp5.addSlider("Stroke")
      .setPosition(dw, altFormat)
      .setSize(17 * dw, 3 * dh)
-     .setRange(1,100)
-     .setValue(1)
+     .setRange(0,2)
+     .setValue(0.3)
      ;     
   cp5.addColorPicker("Color")
      .setPosition(dw, altFormat + 5 * dh)
@@ -258,5 +255,12 @@ public void DeleteMsk() {
   engine.deleteMask();
   
 }
+
+public void UpdGrid() {
+  
+  engine.updateGrid();
+  
+}
+
 
 }
